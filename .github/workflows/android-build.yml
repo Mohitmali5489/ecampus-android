@@ -35,6 +35,19 @@ jobs:
           npm install
           npx cap add android
 
+      - name: Download Logo & Generate Assets
+        run: |
+          # Install Capacitor Assets generator
+          npm install -g @capacitor/assets
+          
+          # Create assets directory and download the provided logo
+          mkdir -p assets
+          curl -L "https://i.ibb.co/SwZ0jG2F/EC.png" -o assets/icon.png
+          curl -L "https://i.ibb.co/SwZ0jG2F/EC.png" -o assets/splash.png
+          
+          # Generate Android icons and splash screens
+          npx @capacitor/assets generate --android
+
       - name: Write Complete AndroidManifest.xml
         run: |
           MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
@@ -42,7 +55,6 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               
-              <!-- Required Permissions -->
               <uses-permission android:name="android.permission.INTERNET" />
               <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
               <uses-permission android:name="android.permission.CAMERA" />
@@ -99,7 +111,7 @@ jobs:
           </manifest>
           EOF
 
-      - name: Inject WebView Configurations & Third-Party Cookies
+      - name: Inject WebView Configurations & Fix Edge-to-Edge Status Bar
         run: |
           JAVA_PATH="android/app/src/main/java/com/mohit/ecampus/MainActivity.java"
           cat << 'EOF' > $JAVA_PATH
@@ -109,9 +121,17 @@ jobs:
           import android.webkit.CookieManager;
           import android.webkit.WebSettings;
           import android.webkit.WebView;
+          import androidx.core.view.WindowCompat;
           import com.getcapacitor.BridgeActivity;
 
           public class MainActivity extends BridgeActivity {
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  // Forces the app to respect the status bar space (fixes overlap)
+                  WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+              }
+
               @Override
               public void onStart() {
                   super.onStart();
