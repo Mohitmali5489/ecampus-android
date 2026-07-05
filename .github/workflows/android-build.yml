@@ -24,12 +24,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          # Removed cache: 'gradle' because Android project is generated dynamically later
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to bypass Node 20 deprecation
+          node-version: '24'
 
       - name: Install Dependencies & Generate Android
         run: |
@@ -43,13 +42,14 @@ jobs:
           # Inject Permissions
           sed -i '/<application/i \    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />\n    <uses-permission android:name="android.permission.CAMERA" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />\n    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />\n    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />\n    <uses-feature android:name="android.hardware.camera" android:required="false" />' $MANIFEST_PATH
           
-          # Inject Safe Browsing metadata and Network Security Config link
+          # Inject Safe Browsing metadata
           sed -i '/<application/a \        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing" android:value="true" />' $MANIFEST_PATH
-          sed -i 's/<application/<application android:usesCleartextTraffic="false" android:networkSecurityConfig="@xml/network_security_config"/' $MANIFEST_PATH
+          
+          # Inject Security Config (FIXED: Using | instead of / to avoid syntax errors)
+          sed -i 's|<application|<application android:usesCleartextTraffic="false" android:networkSecurityConfig="@xml/network_security_config"|' $MANIFEST_PATH
 
-          # Inject Deep Linking Filter inside MainActivity activity tags
-          sed -i '/<intent-filter>/,/<\/intent-filter>/ { /<\/intent-filter>/a \            <intent-filter android:autoVerify="true">\n                <action android:name="android.intent.action.VIEW" />\n                <category android:name="android.intent.category.DEFAULT" />\n                <category android:name="android.intent.category.BROWSABLE" />\n                <data android:scheme="https" android:host="mohitasdeveloper.github.io" android:pathPrefix="/ECampus/" />\n            </intent-filter>' $MANIFEST_PATH
-          }
+          # Inject Deep Linking Filter before closing activity tag (FIXED: Simplified injection)
+          sed -i '/<\/activity>/i \            <intent-filter android:autoVerify="true">\n                <action android:name="android.intent.action.VIEW" />\n                <category android:name="android.intent.category.DEFAULT" />\n                <category android:name="android.intent.category.BROWSABLE" />\n                <data android:scheme="https" android:host="mohitasdeveloper.github.io" android:pathPrefix="/ECampus/" />\n            </intent-filter>' $MANIFEST_PATH
 
       - name: Inject WebView Configurations & Third-Party Cookies
         run: |
