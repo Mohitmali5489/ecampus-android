@@ -33,7 +33,7 @@ jobs:
       - name: Install Dependencies & Push Plugin
         run: |
           npm install
-          npm install @capacitor/push-notifications
+          npm install @capacitor/push-notifications@7
           npx cap add android
 
       - name: Download Logo & Generate Assets
