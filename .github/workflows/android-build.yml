@@ -30,10 +30,11 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install Dependencies & Push Plugin
+      - name: Install Dependencies & Plugins
         run: |
           npm install
           npm install @capacitor/push-notifications@7
+          npm install @capacitor/status-bar@7
           npx cap add android
 
       - name: Download Logo & Generate Assets
