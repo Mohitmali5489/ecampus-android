@@ -127,7 +127,7 @@ jobs:
                   WebSettings settings = webView.getSettings();
                   settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
                   CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
-                  webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+                  webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); // 💡 Keeping this is perfect! It prevents native Android overscroll bounce so our custom JavaScript pull-to-refresh container can handle drags flawlessly.
               }
           }
           EOF
