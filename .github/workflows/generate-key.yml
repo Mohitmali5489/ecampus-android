@@ -1,0 +1,25 @@
+name: Generate Permanent Keystore
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Generate Keystore
+        run: |
+          keytool -genkeypair -v -keystore ecampus.keystore -alias ecampus_key -keyalg RSA -keysize 2048 -validity 10000 -storepass ECampusSecurePassword2026 -keypass ECampusSecurePassword2026 -dname "CN=Mohit, OU=ECampus, O=Developer, L=Kalyan, S=MH, C=IN"
+          
+      - name: Convert to Base64 Text
+        run: base64 -w 0 ecampus.keystore > keystore_b64.txt
+
+      - name: Upload Text File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Keystore-Secret-Text
+          path: keystore_b64.txt
