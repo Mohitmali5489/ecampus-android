@@ -4,11 +4,12 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
-    "errorPath": "index.html" 
+    "url": "https://mohitasdeveloper.github.io/ECampus/",
+    "errorPath": "index.html"
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 500,
+      "launchShowDuration": 1000,
       "launchFadeOutDuration": 300,
       "backgroundColor": "#121212",
       "androidSplashResourceName": "splash",
