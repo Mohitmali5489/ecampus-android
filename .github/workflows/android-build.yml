@@ -55,10 +55,8 @@ jobs:
               <uses-permission android:name="android.permission.INTERNET" />
               <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
               <uses-permission android:name="android.permission.CAMERA" />
-              <!-- 🚀 NEW: Microphone Permissions added -->
               <uses-permission android:name="android.permission.RECORD_AUDIO" />
               <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-              
               <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
               <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
               <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -75,9 +73,7 @@ jobs:
                   android:usesCleartextTraffic="false"
                   android:networkSecurityConfig="@xml/network_security_config">
 
-                  <!-- 🚀 NEW: Firebase Push Click Fixes -->
                   <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="default" />
-                  
                   <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing" android:value="true" />
 
                   <activity
@@ -91,6 +87,12 @@ jobs:
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
                           <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                      <!-- 🚀 FIX: This intent-filter allows Firebase Push Clicks to open the app -->
+                      <intent-filter>
+                          <action android:name="FCM_PLUGIN_ACTIVITY" />
+                          <category android:name="android.intent.category.DEFAULT" />
                       </intent-filter>
 
                       <intent-filter android:autoVerify="true">
@@ -160,8 +162,12 @@ jobs:
         run: |
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > android/app/google-services.json
 
-      - name: Sync Capacitor Changes
-        run: npx cap sync android
+      - name: Sync Capacitor Changes & Inject Google Services Plugin
+        run: |
+          npx cap sync android
+          # 🚀 FIX: Injecting Firebase services plugin explicitly required for notification clicks
+          sed -i '/dependencies {/a \        classpath "com.google.gms:google-services:4.4.2"' android/build.gradle
+          echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
 
       - name: Decode Permanent Keystore
         run: |
@@ -179,7 +185,7 @@ jobs:
           GRADLE_PATH="android/app/build.gradle"
           APP_VARS_PATH="android/variables.gradle"
           
-          # 🚀 NEW: Force Target SDK and Compile SDK to API Level 36
+          # 🚀 FIX: Forcing Android 16 (API Level 36)
           if [ -f "$APP_VARS_PATH" ]; then
             sed -i "s/targetSdkVersion = .*/targetSdkVersion = 36/g" $APP_VARS_PATH
             sed -i "s/compileSdkVersion = .*/compileSdkVersion = 36/g" $APP_VARS_PATH
@@ -187,16 +193,12 @@ jobs:
           sed -i "s/targetSdkVersion .*/targetSdkVersion 36/g" $GRADLE_PATH
           sed -i "s/compileSdkVersion .*/compileSdkVersion 36/g" $GRADLE_PATH
           
-          # Automatically bump the internal versionCode using the GitHub Action Run Number
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/g" $GRADLE_PATH
-          
-          # Manually set the public versionName to match your package.json
           sed -i "s/versionName \"1.0\"/versionName \"2.0.0\"/g" $GRADLE_PATH
           
-          # Inject Signing Config
           sed -i '/buildTypes {/i \    signingConfigs {\n        release {\n            storeFile file(RELEASE_STORE_FILE)\n            storePassword RELEASE_STORE_PASSWORD\n            keyAlias RELEASE_KEY_ALIAS\n            keyPassword RELEASE_KEY_PASSWORD\n        }\n    }' $GRADLE_PATH
           sed -i '/minifyEnabled/i \            signingConfig signingConfigs.release' $GRADLE_PATH
-          
+
       - name: Make Gradle Executable
         run: chmod +x ./android/gradlew
 
