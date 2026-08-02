@@ -1,23 +1,26 @@
 {
-  "appId": "com.mohit.ecampus",
-  "appName": "ECampus",
-  "webDir": "www",
-  "bundledWebRuntime": false,
-  "server": {
-    "errorPath": "index.html" 
+  "name": "com.mohit.ecampus",
+  "version": "2.0.0",
+  "description": "ECampus WebView App",
+  "scripts": {
+    "build": "echo 'No web build needed for live URL'"
   },
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 500,
-      "launchFadeOutDuration": 300,
-      "backgroundColor": "#121212",
-      "androidSplashResourceName": "splash",
-      "showSpinner": false,
-      "splashFullScreen": true,
-      "splashImmersive": true
-    },
-    "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
-    }
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/browser": "^7.0.0",
+    "@capacitor/camera": "^7.0.0",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/device": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/keyboard": "^7.0.0",
+    "@capacitor/network": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
