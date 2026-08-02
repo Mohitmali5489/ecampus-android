@@ -55,6 +55,10 @@ jobs:
               <uses-permission android:name="android.permission.INTERNET" />
               <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
               <uses-permission android:name="android.permission.CAMERA" />
+              <!-- 🚀 NEW: Microphone Permissions added -->
+              <uses-permission android:name="android.permission.RECORD_AUDIO" />
+              <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+              
               <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
               <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
               <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -71,6 +75,9 @@ jobs:
                   android:usesCleartextTraffic="false"
                   android:networkSecurityConfig="@xml/network_security_config">
 
+                  <!-- 🚀 NEW: Firebase Push Click Fixes -->
+                  <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="default" />
+                  
                   <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing" android:value="true" />
 
                   <activity
@@ -127,7 +134,7 @@ jobs:
                   WebSettings settings = webView.getSettings();
                   settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
                   CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
-                  webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); // 💡 Keeping this is perfect! It prevents native Android overscroll bounce so our custom JavaScript pull-to-refresh container can handle drags flawlessly.
+                  webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); 
               }
           }
           EOF
@@ -170,6 +177,15 @@ jobs:
       - name: Inject Signing Configuration & Automate Version Code
         run: |
           GRADLE_PATH="android/app/build.gradle"
+          APP_VARS_PATH="android/variables.gradle"
+          
+          # 🚀 NEW: Force Target SDK and Compile SDK to API Level 36
+          if [ -f "$APP_VARS_PATH" ]; then
+            sed -i "s/targetSdkVersion = .*/targetSdkVersion = 36/g" $APP_VARS_PATH
+            sed -i "s/compileSdkVersion = .*/compileSdkVersion = 36/g" $APP_VARS_PATH
+          fi
+          sed -i "s/targetSdkVersion .*/targetSdkVersion 36/g" $GRADLE_PATH
+          sed -i "s/compileSdkVersion .*/compileSdkVersion 36/g" $GRADLE_PATH
           
           # Automatically bump the internal versionCode using the GitHub Action Run Number
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/g" $GRADLE_PATH
