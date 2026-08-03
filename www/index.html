@@ -2,82 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ECampus - Loading...</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
     <style>
-        /* Base styling matching your screenshot */
-        body {
-            background-color: #ffffff;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        /* Spinner Animation */
-        .spinner {
-            width: 45px;
-            height: 45px;
-            border: 4px solid #f3f4f6; /* Gray 100 */
-            border-top: 4px solid #059669; /* Emerald 600 */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 24px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Loading Text */
-        .loading-text {
-            color: #374151; /* Gray 700 */
-            font-weight: 600;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-        }
+        body { background: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .spinner { width: 45px; height: 45px; border: 4px solid #f3f4f6; border-top: 4px solid #059669; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-
-    <!-- Loading UI -->
     <div class="spinner"></div>
-    <div class="loading-text">Loading ECampus...</div>
 
-    <!-- Routing Logic -->
     <script>
-        // 🚨 IMPORTANT: Replace this with your actual live web app URL 🚨
-        const LIVE_APP_URL = 'https://YOUR-LIVE-WEB-URL.com';
+        const LIVE_URL = "https://mohitasdeveloper.github.io/ECampus/";
 
-        function checkNetworkAndRoute() {
-            if (navigator.onLine) {
-                // Device is online -> Redirect into the live app
-                window.location.replace(LIVE_APP_URL);
-            } else {
-                // Device is offline -> Load the local offline.html screen
-                window.location.replace('offline.html');
-            }
+        // Instantly check network on app open
+        if (navigator.onLine) {
+            window.location.replace(LIVE_URL);
+        } else {
+            window.location.replace("offline.html");
         }
-
-        // Run the check when the page finishes loading
-        window.addEventListener('load', () => {
-            // A slight 500ms delay ensures the loading spinner renders smoothly before routing
-            setTimeout(checkNetworkAndRoute, 500);
-            
-            // Register the local Service Worker (sw.js)
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('Local Service Worker registered successfully'))
-                    .catch((error) => console.error('Local Service Worker failed:', error));
-            }
-        });
     </script>
 </body>
 </html>
