@@ -127,6 +127,9 @@ jobs:
           import android.webkit.WebSettings;
           import android.webkit.WebView;
           import com.getcapacitor.BridgeActivity;
+          import android.net.ConnectivityManager;
+          import android.net.NetworkInfo;
+          import android.content.Context;
 
           public class MainActivity extends BridgeActivity {
               @Override
@@ -137,6 +140,14 @@ jobs:
                   settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
                   CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
                   webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); 
+                  
+                  // Native Cold-Start Network Check
+                  ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                  NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                  if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
+                      // Instantly force local offline page if no internet, hiding the live URL
+                      webView.loadUrl("https://localhost/offline.html");
+                  }
               }
           }
           EOF
@@ -194,7 +205,7 @@ jobs:
           sed -i "s/compileSdkVersion .*/compileSdkVersion 36/g" $GRADLE_PATH
           
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/g" $GRADLE_PATH
-          sed -i "s/versionName \"1.0\"/versionName \"2.0.0\"/g" $GRADLE_PATH
+          sed -i "s/versionName \"1.0\"/versionName \"2.0.1\"/g" $GRADLE_PATH
           
           sed -i '/buildTypes {/i \    signingConfigs {\n        release {\n            storeFile file(RELEASE_STORE_FILE)\n            storePassword RELEASE_STORE_PASSWORD\n            keyAlias RELEASE_KEY_ALIAS\n            keyPassword RELEASE_KEY_PASSWORD\n        }\n    }' $GRADLE_PATH
           sed -i '/minifyEnabled/i \            signingConfig signingConfigs.release' $GRADLE_PATH
