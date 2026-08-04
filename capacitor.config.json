@@ -4,6 +4,7 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
+    "url": "https://mohitasdeveloper.github.io/ECampus/",
     "errorPath": "offline.html",
     "allowNavigation": [
       "mohitasdeveloper.github.io"
