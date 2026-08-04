@@ -1,98 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<title>ECampus</title>
-
-<style>
-
-html,body{
-
-margin:0;
-
-height:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-family:sans-serif;
-
-}
-
-.loader{
-
-width:50px;
-
-height:50px;
-
-border-radius:50%;
-
-border:4px solid #e5e5e5;
-
-border-top-color:#059669;
-
-animation:spin 1s linear infinite;
-
-}
-
-@keyframes spin{
-
-to{
-
-transform:rotate(360deg);
-
-}
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ECampus Loading</title>
+    <style>
+        body { margin:0; height:100vh; background:white; display:flex; justify-content:center; align-items:center; }
+        .loader { width:50px; height:50px; border-radius:50%; border:4px solid #e5e5e5; border-top-color:#059669; animation:spin 1s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
 </head>
-
 <body>
-
-<div class="loader"></div>
-
-<script>
-
-const LIVE_URL="https://mohitasdeveloper.github.io/ECampus/";
-
-function goOnline(){
-
-window.location.href=LIVE_URL;
-
-}
-
-function goOffline(){
-
-window.location.replace("offline.html");
-
-}
-
-if(navigator.onLine){
-
-goOnline();
-
-}else{
-
-goOffline();
-
-}
-
-window.addEventListener("online",goOnline);
-
-</script>
-
+    <div class="loader"></div>
+    <script>
+        // Let the Capacitor bridge initialize for 1 second, then route
+        setTimeout(() => {
+            window.location.replace("https://mohitasdeveloper.github.io/ECampus/");
+        }, 1000);
+    </script>
 </body>
 </html>
