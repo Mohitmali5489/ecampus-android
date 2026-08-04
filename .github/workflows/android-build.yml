@@ -141,12 +141,15 @@ jobs:
                   CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
                   webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); 
                   
-                  // Native Cold-Start Network Check
+                  // Native Network Check
                   ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                   NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                   if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
-                      // Instantly force local offline page if no internet, hiding the live URL
+                      // Offline: Let Capacitor load the local errorPath
                       webView.loadUrl("https://localhost/offline.html");
+                  } else {
+                      // Online: Redirect dynamically using Capacitor's injected bridge
+                      webView.loadUrl("https://localhost/index.html");
                   }
               }
           }
