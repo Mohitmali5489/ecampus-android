@@ -127,9 +127,6 @@ jobs:
           import android.webkit.WebSettings;
           import android.webkit.WebView;
           import com.getcapacitor.BridgeActivity;
-          import android.net.ConnectivityManager;
-          import android.net.NetworkInfo;
-          import android.content.Context;
 
           public class MainActivity extends BridgeActivity {
               @Override
@@ -140,17 +137,6 @@ jobs:
                   settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
                   CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
                   webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER); 
-                  
-                  // Native Network Check
-                  ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                  NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                  if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
-                      // Offline: Let Capacitor load the local errorPath
-                      webView.loadUrl("https://localhost/offline.html");
-                  } else {
-                      // Online: Redirect dynamically using Capacitor's injected bridge
-                      webView.loadUrl("https://localhost/index.html");
-                  }
               }
           }
           EOF
