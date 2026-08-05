@@ -1,6 +1,6 @@
 {
   "name": "com.mohit.ecampus",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "ECampus WebView App",
   "scripts": {
     "build": "echo 'No web build needed for live URL'"
@@ -16,6 +16,7 @@
     "@capacitor/haptics": "^7.0.0",
     "@capacitor/keyboard": "^7.0.0",
     "@capacitor/network": "^7.0.0",
+    "@capacitor/push-notifications": "^7.0.0",
     "@capacitor/share": "^7.0.0",
     "@capacitor/splash-screen": "^7.0.0",
     "@capacitor/status-bar": "^7.0.0"
