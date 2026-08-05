@@ -30,11 +30,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Prepare placeholder web directory
+        run: |
+          mkdir -p www
+          echo '<!DOCTYPE html><html><head><title>ECampus</title></head><body>Loading ECampus...</body></html>' > www/index.html
+
       - name: Install Dependencies & Plugins
         run: |
           npm install
-          npm install @capacitor/push-notifications@7
-          npm install @capacitor/status-bar@7
           npx cap add android
 
       - name: Download Logo & Generate Assets
