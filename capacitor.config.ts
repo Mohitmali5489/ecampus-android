@@ -6,6 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
 
   server: {
+    url: 'https://mohitasdeveloper.github.io/ECampus/',
     allowNavigation: [
       'mohitasdeveloper.github.io'
     ]
@@ -28,6 +29,10 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: "body",
       resizeOnFullScreen: true
+    },
+
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
     }
   }
 };
