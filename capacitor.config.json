@@ -4,7 +4,10 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
-    "url": "https://mohitasdeveloper.github.io/ECampus/"
+    "url": "https://mohitasdeveloper.github.io/ECampus/",
+    "allowNavigation": [
+      "mohitasdeveloper.github.io"
+    ]
   },
   "plugins": {
     "SplashScreen": {
