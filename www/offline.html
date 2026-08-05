@@ -98,16 +98,15 @@ transform:scale(.96);
 <script>
 function retry() {
     if (navigator.onLine) {
-        window.location.replace("index.html");
+        // 🚀 FIX: Route directly to the live URL so the bridge initializes properly
+        window.location.replace("https://mohitasdeveloper.github.io/ECampus/");
     }
-    // The alert has been completely removed. It will now fail silently.
 }
 
 window.addEventListener("online", () => {
-    window.location.replace("index.html");
+    window.location.replace("https://mohitasdeveloper.github.io/ECampus/");
 });
 </script>
-
 </body>
 
 </html>
