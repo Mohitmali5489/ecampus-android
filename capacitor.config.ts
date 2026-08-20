@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
 
   server: {
-    url: 'https://mohitasdeveloper.github.io/ECampus/',
+    url: 'https://ecampus-android.mohitmali.in/',
     allowNavigation: [
       'mohitasdeveloper.github.io'
     ]
