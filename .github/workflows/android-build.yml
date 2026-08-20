@@ -228,7 +228,7 @@ jobs:
           sed -i "s/compileSdkVersion .*/compileSdkVersion 36/g" $GRADLE_PATH
           
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/g" $GRADLE_PATH
-          sed -i "s/versionName \"1.0\"/versionName \"2.0.2\"/g" $GRADLE_PATH
+          sed -i "s/versionName \"1.0\"/versionName \"2.0.3\"/g" $GRADLE_PATH
           
           sed -i '/buildTypes {/i \    signingConfigs {\n        release {\n            storeFile file(RELEASE_STORE_FILE)\n            storePassword RELEASE_STORE_PASSWORD\n            keyAlias RELEASE_KEY_ALIAS\n            keyPassword RELEASE_KEY_PASSWORD\n        }\n    }' $GRADLE_PATH
           sed -i '/minifyEnabled/i \            signingConfig signingConfigs.release' $GRADLE_PATH
